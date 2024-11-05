@@ -38,7 +38,7 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=password
     volumes:
-      - ./db:/data/db
+      - ./seed:/data/db
     networks:
       - mongo_network
       - api_network
