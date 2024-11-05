@@ -11,7 +11,9 @@ This repository contains the containerization of the mukti-container application
 ### Database Seeding.
 
 1.image: The mongo:8.0-rc image is used for the MongoDB database.
+
 2.Volumes: A volume ./seed:/data/db is configured, which means the MongoDB database will use the local directory ./seed as its data directory. This directory can contain seed data for the database, which is loaded upon database initialization.
+
 3.Environment: Environment variables MONGO_INITDB_ROOT_USERNAME and MONGO_INITDB_ROOT_PASSWORD are used to set up the database admin account, essential for connecting and operating the database.
 
 ### M.ulti-Stack.
