@@ -1,3 +1,10 @@
+version: '3'
+
+networks:
+  network:
+    external: true
+    name: 'network'
+
 services:
 
   api:
@@ -5,3 +12,46 @@ services:
     container_name: movies-api
     ports:
       - '9000:9000'
+    environment:
+      - MONGODB_URI=mongodb://admin:password@mongo:27017
+      - REDIS_URI=redis://redis
+      - ENABLE_WRITING_HANDLERS=false
+    depends_on:
+      - mongo
+      - redis
+    networks:
+      - network
+
+  mongo:
+    image: mongo:8.0-rc
+    container_name: mongo
+    ports:
+      - '27017:27017'
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    volumes:
+      - ./db:/data/db
+    networks:
+      - network
+
+  mongo-express:
+    image: mongo-express:1.0-20-alpine3.19
+    container_name: express
+    restart: always
+    ports:
+      - '8080:8081'
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=password
+      - ME_CONFIG_MONGODB_SERVER=mongo
+    depends_on:
+      - mongo
+    networks:
+      - network
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    networks:
+      - network
