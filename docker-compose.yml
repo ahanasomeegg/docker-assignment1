@@ -1,9 +1,15 @@
 version: '3'
 
 networks:
-  network:
+  mongo_network:
     external: true
-    name: 'network'
+    name: 'mongo_network'
+  redis_network:
+    external: true
+    name: 'redis'
+  api_network:
+    external: true
+    name: 'api'
 
 services:
 
@@ -20,7 +26,8 @@ services:
       - mongo
       - redis
     networks:
-      - network
+      - api_network
+      - redis_network
 
   mongo:
     image: mongo:8.0-rc
@@ -33,7 +40,8 @@ services:
     volumes:
       - ./db:/data/db
     networks:
-      - network
+      - mongo_network
+      - api_network
 
   mongo-express:
     image: mongo-express:1.0-20-alpine3.19
@@ -48,10 +56,10 @@ services:
     depends_on:
       - mongo
     networks:
-      - network
+      - mongo_network
 
   redis:
     image: redis:alpine
     container_name: redis
     networks:
-      - network
+      - redis_network
